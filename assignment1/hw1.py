@@ -33,26 +33,36 @@ def histogram_times(filename):
 
 
 def weigh_pokemons(filename, weight):
+    #Stores JSON file into pokemon_database.
     with open(filename) as f:
         pokemon_database = json.load(f)
 
+    #Creates an empty list to store matching pokemon in.
     matchingPokemon = []
 
+    #Goes through every pokemon in the database.
     for pokemon in pokemon_database['pokemon']:
+        #Checks if the weight in the database (with the 'kg' removed) matches
+        #with the inputted weight.
         if float(pokemon['weight'][ : -2]) == weight:
+            #Adds matching pokemon to the list prepared.
             matchingPokemon.append(pokemon['name'])
 
     return matchingPokemon
 
 
 def single_type_candy_count(filename):
+    #Stores JSON file into pokemon_database.
     with open(filename) as f:
         pokemon_database = json.load(f)
 
     candySum = 0;
 
+    #Goes through every pokemon in the database.
     for pokemon in pokemon_database['pokemon']:
+        #Checks if the pokemon is a single type.
         if 'candy_count' in pokemon and len(pokemon['type']) == 1:
+            #Adds the pokemon's candy count to candySum.
             candySum += pokemon['candy_count']
 
     return candySum
@@ -73,13 +83,17 @@ def reflections_and_projections(points):
 
 
 def normalize(image):
+    #Finds the maximum and minimum value in the 2 dimensional array (image).
     maximum = max(max(x) for x in image)
     minimum = min(min(x) for x in image)
 
+    #Changes every element in the two dimensional array according to the formula.
     image =  255 / (maximum - minimum) * (np.array(image) - minimum)
 
     return image
 
 
-def sigmoid_normalize(image):
-    pass
+def sigmoid_normalize(image, a):
+    #Changes every element in the two dimensional array according to the formula.
+    image = 255 * (1 + exp((-a ** -1) * (np.array(image) - 128))) ** (-1)
+    return image
